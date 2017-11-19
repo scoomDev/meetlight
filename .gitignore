@@ -44,7 +44,6 @@
 /.web-server-pid
 .idea/
 /vendor/
-tw_bootstrap/
 node_modules/
 package-lock.json
 package.json
