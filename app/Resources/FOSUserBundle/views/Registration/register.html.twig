@@ -1,5 +1,18 @@
 {% extends "@FOSUser/layout.html.twig" %}
 
+{% block title %}Inscription - {{ parent() }}{% endblock %}
+
 {% block fos_user_content %}
+    <p>si vous possédez déjà un compte, <a href="{{ path('fos_user_security_login') }}">connectez-vous.</a></p>
 {% include "@FOSUser/Registration/register_content.html.twig" %}
 {% endblock fos_user_content %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB5t0b8SgM5NnxhLNx3_vvpXQMgD0WWsoo">
+    </script>
+
+    <script type="text/javascript" src="{{ asset('js/googleApi/places/autocomplete.js') }}"></script>
+{% endblock %}
+

@@ -2,6 +2,7 @@
 
 <div class="card">
     <div class="card-body">
+        <h1 class="card-title">Créer un compte</h1>
         {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
         <div class="row">
             <div class="col-md-6">
@@ -24,7 +25,10 @@
                 {{ form_row(form.skill) }}
             </div>
             <div class="col-md-6">
-                {# TO DO #}
+                <div class="form-group">
+                    <label>{{ 'form.address' | trans }}</label>
+                    <input class="form-control" id="user_input_autocomplete_address" placeholder="Votre adresse...">
+                </div>
             </div>
         </div>
         <div class="row">

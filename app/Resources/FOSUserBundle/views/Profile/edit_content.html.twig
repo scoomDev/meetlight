@@ -1,8 +1,39 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Modifier mes infos</h1>
+        {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.lastName) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.firstName) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.username) }}
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.email) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>{{ 'form.address' | trans }}</label>
+                        <input class="form-control" id="user_input_autocomplete_address" placeholder="{{ 'form.placeholder.address' | trans }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    {{ form_row(form.current_password) }}
+                </div>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+            </div>
+        {{ form_end(form) }}
     </div>
-{{ form_end(form) }}
+</div>
