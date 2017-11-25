@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use AppBundle\Entity\Skill;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * User
  *
  * @ORM\Table(name="ml_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @Vich\Uploadable
  */
 class User extends BaseUser
 {
@@ -67,6 +70,35 @@ class User extends BaseUser
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Skill")
      */
     private $skill;
+
+    /**
+     *
+     * @Vich\UploadableField(mapping="profile_image", fileNameProperty="imageName", size="imageSize")
+     *
+     * @var File
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var integer
+     */
+    private $imageSize;
+
+    /**
+     * @ORM\Column(type="datetime")
+     *
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * Set firstname
@@ -234,5 +266,72 @@ class User extends BaseUser
     public function getCountry()
     {
         return $this->country;
+    }
+
+    /**
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     *
+     * @return User
+     */
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param string $imageName
+     *
+     * @return User
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * @param integer $imageSize
+     *
+     * @return User
+     */
+    public function setImageSize($imageSize)
+    {
+        $this->imageSize = $imageSize;
+
+        return $this;
+    }
+
+    /**
+     * @return integer|null
+     */
+    public function getImageSize()
+    {
+        return $this->imageSize;
     }
 }

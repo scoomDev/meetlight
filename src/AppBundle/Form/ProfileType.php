@@ -7,12 +7,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+                ->add('imageFile', VichImageType::class, [
+                        'label' => false,
+                        'translation_domain' => 'FOSUserBundle',
+                        'required' => false,
+                        'allow_delete' => false,
+                ])
                 ->add('firstName', TextType::class, [
                         'label' => 'form.firstname',
                         'translation_domain' => 'FOSUserBundle'

@@ -9,3 +9,24 @@ body {
   padding: 3rem 1.5rem;
   text-align: center;
 }
+
+//--------------------------------------------------
+// PROFIL
+//--------------------------------------------------
+// Edit profile
+.img-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: $custom-shadow;
+}
+
+//--------------------------------------------------
+// TOOLS
+//--------------------------------------------------
+// Croppie
+.cr-boundary {
+  width: 100%;
+}

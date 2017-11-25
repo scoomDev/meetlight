@@ -1,39 +1,68 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {% if app.user.imageName != null %}
+                    <div class="img-box">
+                        <img class="img-fluid" src="{{ asset('images/profile/' ~ app.user.ImageName) }}" alt="Photo de profil de {{ app.user.username }}">
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Vous avez la possiblité de mettre une photo de profil, pour cela, choississez une photo
+                        disponible sur ordinateur ou votre mobile
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h5 class="card-title">{{ app.user.imageName == null ? "Ajouter une photo" : "Changer ma photo" }}</h5>
+                {{ form_widget(form.imageFile) }}
+                <div id="img-box"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body">
         <h1 class="card-title">Modifier mes infos</h1>
         {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-            <div class="row">
-                <div class="col-md-6">
-                    {{ form_row(form.lastName) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_row(form.firstName) }}
+
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.lastName) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.firstName) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.username) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.email) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group change-address" id="change-address">
+                    <label>{{ 'form.actualAddress' | trans }} : {{ app.user.streetNumber }} {{ app.user.route }}, {{ app.user.locality }}</label>
+                    <input class="form-control" id="user_input_autocomplete_address" placeholder="{{ 'form.placeholder.address' | trans }}">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    {{ form_row(form.username) }}
-                </div>
-                <div class="col-md-6">
-                    {{ form_row(form.email) }}
-                </div>
+            <div class="col-md-6">
+                {{ form_row(form.current_password) }}
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>{{ 'form.address' | trans }}</label>
-                        <input class="form-control" id="user_input_autocomplete_address" placeholder="{{ 'form.placeholder.address' | trans }}">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    {{ form_row(form.current_password) }}
-                </div>
-            </div>
-            <div>
-                <input class="btn btn-primary" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
-            </div>
-        {{ form_end(form) }}
+        </div>
+
+        <div>
+            <button class="change-address-btn btn btn-dark mb-3" id="change-address-btn">Changer mon addresse</button>
+            <input class="btn btn-primary pull-right" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        </div>
+    {{ form_end(form) }}
     </div>
 </div>

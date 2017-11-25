@@ -93,3 +93,19 @@ fos_user:
             from_email:
                 address:        '%mailer_user%'
                 sender_name:    meetlight.com - Ré-initialisation
+
+# VichUploaderBundle Configuration
+vich_uploader:
+    db_driver: orm
+    mappings:
+        profile_image:
+            uri_prefix:           /images/profile
+            upload_destination:   '%kernel.root_dir%/../web/images/profile'
+
+        gallery_image:
+            uri_prefix:           /images/gallery
+            upload_destination:   '%kernel.root_dir%/../web/images/gallery'
+
+            inject_on_load:       false
+            delete_on_update:     true
+            delete_on_remove:     true

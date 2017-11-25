@@ -76,6 +76,7 @@ layout:
     register: Inscription
     logged_in_as: 'Connecté en tant que %username%'
 form:
+    profileImage: 'Photo de profil'
     group_name: 'Nom du groupe'
     firstname: 'Prénom'
     lastname: 'Nom'
@@ -83,6 +84,7 @@ form:
     email: 'Adresse e-mail'
     skill: 'Ma compétence'
     address: 'Adresse'
+    actualAddress: 'Adresse actuelle'
     current_password: 'Confirmer avec votre mot de passe'
     password: 'Mot de passe'
     password_confirmation: 'Répéter le mot de passe'

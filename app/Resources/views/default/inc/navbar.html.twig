@@ -19,7 +19,10 @@
                 </li>
             {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('fos_user_profile_edit') }}">Mon compte</a>
+                    <a class="nav-link" href="{{ path('fos_user_profile_show') }}">Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('fos_user_profile_edit') }}">Editer profil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>

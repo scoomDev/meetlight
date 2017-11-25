@@ -1,14 +1,95 @@
 {% extends "@FOSUser/layout.html.twig" %}
 
+{% block croppieCSS %}
+    <link rel="stylesheet" href="{{ asset('js/croppie/croppie.css') }}" />
+{% endblock %}
+
 {% block fos_user_content %}
-{% include "@FOSUser/Profile/edit_content.html.twig" %}
+    {% include "@FOSUser/Profile/edit_content.html.twig" %}
 {% endblock fos_user_content %}
 
 {% block javascript %}
     {{ parent() }}
+    <!-- Google Places -->
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyB5t0b8SgM5NnxhLNx3_vvpXQMgD0WWsoo">
     </script>
-
     <script type="text/javascript" src="{{ asset('js/googleApi/places/autocomplete.js') }}"></script>
+    <!-- Croppie -->
+    <script src="{{ asset('js/croppie/croppie.js') }}"></script>
+
+    <script>
+        const inputImgUp = $('#fos_user_profile_form_imageFile_file'),
+            imageBox = $('#img-box'),
+            imgField = document.createElement('img');
+            resultBtn = document.createElement('button');
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) { // show image in DOM
+                    imgField.setAttribute('src', e.target.result);
+                    imageBox.append(imgField);
+                    imgField.className += 'img-fluid';
+                    if (!document.getElementById('croppie')) {
+                        imgField.id += 'croppie';
+                        imageBox.append(resultBtn);
+                    } else {
+                        resultBtn.style.display = "block";
+                    }
+                    resultBtn.className += 'btn btn-primary mb-2 saveBtn';
+                    resultBtn.textContent = "Enregistrer";
+
+                    let croppieImg = document.getElementById('croppie');
+                    console.log(croppieImg);
+                    let croppie = new Croppie(croppieImg, {
+                        viewport: { width: 200, height: 200 },
+                        boundary: { height: 300 }
+                    });
+
+                    croppie.bind({
+                        url: e.target.result
+                    });
+
+                    resultBtn.addEventListener('click', function() {
+                        croppie.result({
+                            type: 'base64',
+                            size: 'viewport',
+                            format: 'jpeg',
+                            quality: 1
+                        }).then(function (resp) {
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ path('cropImg') }}',
+                                data: resp,
+                                processData: false,
+                                contentType: false,
+                                beforeSend: () => {
+                                    $('.saveBtn').text('Enregistrement').append(' <i class="fa fa-spinner" aria-hidden="true"></i>')
+                                },
+                                success: () => {
+                                    croppie.destroy();
+                                    $('.saveBtn').css('display', 'none');
+                                    $('.cr-original-image').css("display", "none");
+                                    $('#fos_user_profile_form_imageFile_file').val('');
+                                },
+                                error: () => {
+                                    console.log("erreur !!!")
+                                }
+                            });
+                        })
+                    })
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        inputImgUp.change(function(){
+            readURL(this);
+        });
+
+    </script>
 {% endblock %}
