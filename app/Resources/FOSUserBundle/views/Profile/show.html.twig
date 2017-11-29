@@ -1,5 +1,22 @@
-{% extends "@FOSUser/layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
 
-{% block fos_user_content %}
-{% include "@FOSUser/Profile/show_content.html.twig" %}
-{% endblock fos_user_content %}
+<div class="card">
+    <div class="card-body">
+        <div class="fos_user_user_show">
+            {% if user.imageName != null %}
+                <div class="img-box mb-3">
+                    <img class="profile-img" src="{{ asset('images/profile/' ~ user.ImageName) }}" alt="Photo de profil de {{ user.username }}">
+                </div>
+            {% endif %}
+            <p>
+                {{ user.username }} - {{ user.skill }}<br>
+                {{ user.locality }}<br>
+                {{ user.email }}
+            </p>
+            <hr>
+            <nav class="nav flex-column">
+                <a class="nav-link" href="{{ path('fos_user_profile_edit') }}">Modifier mon profil</a>
+            </nav>
+        </div>
+    </div>
+</div>

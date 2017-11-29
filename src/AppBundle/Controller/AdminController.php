@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Service\FileUploader;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,10 +30,10 @@ class AdminController extends Controller
      *
      * @param Request      $request
      *
-     * @return RedirectResponse | JsonResponse
+     * @return JsonResponse
      * @Route("/crop-img", name="cropImg")
      */
-    public function cropImgAction(Request $request) : RedirectResponse
+    public function cropImgAction(Request $request) : JsonResponse
     {
         if ($request->isXmlHttpRequest()) {
             $em = $this->getDoctrine()->getManager();
@@ -45,17 +44,25 @@ class AdminController extends Controller
             list(, $data)      = explode(',', $data);
             $data = base64_decode($data);
 
-            file_put_contents($this->getParameter('kernel.project_dir').'\web\images\profile\\'.$this->getUser()->getUsername().$this->getUser()->getId().'.jpg', $data);
+            $root = $this->getParameter('kernel.project_dir');
+            $imagePath = '\web\images\profile\\';
+            $imageName = uniqid($prefix = "ml_avatar_");
+
 
             if ($data) {
-                $user->setImageName($this->getUser()->getUsername().$this->getUser()->getId().'.jpg');
+                file_put_contents($root.$imagePath.$imageName.'.jpg', $data);
+                if ($user->getImageName() && file_exists($root.$imagePath.$user->getImageName())) {
+                    if ($user->getImageName() != "default-avatar.jpg") {
+                        unlink($root.$imagePath.$user->getImageName());
+                    }
+                }
+                $user->setImageName($imageName.'.jpg');
                 $em->persist($user);
                 $em->flush();
-
-                return $this->redirectToRoute('fos_user_profile_edit');
             }
+
+            return new JsonResponse('ok', 200);
         }
-        $this->addFlash('danger', 'Il y a eu un problème, veuillez recommencer ou contacter le support');
-        return $this->redirectToRoute('fos_user_profile_edit');
+        return new JsonResponse('error', 500);
     }
 }

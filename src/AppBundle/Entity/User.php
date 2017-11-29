@@ -5,15 +5,12 @@ namespace AppBundle\Entity;
 use AppBundle\Entity\Skill;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * User
  *
  * @ORM\Table(name="ml_user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
- * @Vich\Uploadable
  */
 class User extends BaseUser
 {
@@ -65,19 +62,24 @@ class User extends BaseUser
     private $country;
 
     /**
+     * @var int
+     * @ORM\Column(name="lat", type="float")
+     */
+    private $lat;
+
+    /**
+     * @var int
+     * @ORM\Column(name="lng", type="float")
+     */
+    private $lng;
+
+    /**
      * @var Skill
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Skill")
      */
     private $skill;
 
-    /**
-     *
-     * @Vich\UploadableField(mapping="profile_image", fileNameProperty="imageName", size="imageSize")
-     *
-     * @var File
-     */
-    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -87,18 +89,12 @@ class User extends BaseUser
     private $imageName;
 
     /**
-     * @ORM\Column(type="integer")
-     *
-     * @var integer
+     * User constructor.
      */
-    private $imageSize;
-
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var \DateTime
-     */
-    private $updatedAt;
+    public function __construct()
+    {
+        $this->setImageName('default-avatar.jpg');
+    }
 
     /**
      * Set firstname
@@ -269,33 +265,6 @@ class User extends BaseUser
     }
 
     /**
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
-     *
-     * @return User
-     */
-    public function setImageFile(File $image = null)
-    {
-        $this->imageFile = $image;
-
-        if ($image) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return File|null
-     */
-    public function getImageFile()
-    {
-        return $this->imageFile;
-    }
-
-    /**
      * @param string $imageName
      *
      * @return User
@@ -315,23 +284,76 @@ class User extends BaseUser
         return $this->imageName;
     }
 
+
     /**
-     * @param integer $imageSize
+     * Set lat
+     *
+     * @param float $lat
      *
      * @return User
      */
-    public function setImageSize($imageSize)
+    public function setLat($lat)
     {
-        $this->imageSize = $imageSize;
+        $this->lat = $lat;
 
         return $this;
     }
 
     /**
-     * @return integer|null
+     * Get lat
+     *
+     * @return float
      */
-    public function getImageSize()
+    public function getLat()
     {
-        return $this->imageSize;
+        return $this->lat;
+    }
+
+    /**
+     * Set long
+     *
+     * @param float $long
+     *
+     * @return User
+     */
+    public function setLong($long)
+    {
+        $this->long = $long;
+
+        return $this;
+    }
+
+    /**
+     * Get long
+     *
+     * @return float
+     */
+    public function getLong()
+    {
+        return $this->long;
+    }
+
+    /**
+     * Set lng
+     *
+     * @param float $lng
+     *
+     * @return User
+     */
+    public function setLng($lng)
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * Get lng
+     *
+     * @return float
+     */
+    public function getLng()
+    {
+        return $this->lng;
     }
 }

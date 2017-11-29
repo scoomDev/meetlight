@@ -13,14 +13,7 @@ class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-                ->add('imageFile', VichImageType::class, [
-                        'label' => false,
-                        'translation_domain' => 'FOSUserBundle',
-                        'required' => false,
-                        'allow_delete' => false,
-                ])
-                ->add('firstName', TextType::class, [
+        $builder->add('firstName', TextType::class, [
                         'label' => 'form.firstname',
                         'translation_domain' => 'FOSUserBundle'
                 ])
@@ -32,6 +25,8 @@ class ProfileType extends AbstractType
                 ->add('route', HiddenType::class)
                 ->add('locality', HiddenType::class)
                 ->add('country', HiddenType::class)
+                ->add('lat', HiddenType::class)
+                ->add('lng', HiddenType::class)
         ;
     }
 

@@ -10,7 +10,7 @@
                 <a class="nav-link" href="{{ path('homepage') }}">Accueil <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('fos_user_registration_register') }}">Inscription</a>
+                <a class="nav-link" href="{{ path('searchResult') }}">Recherche</a>
             </li>
             {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {% if is_granted("ROLE_ADMIN") %}
@@ -19,15 +19,11 @@
                 </li>
             {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('fos_user_profile_show') }}">Profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('fos_user_profile_edit') }}">Editer profil</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ path('fos_user_security_logout') }}"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
                 </li>
             {% endif %}
         </ul>
+        {{ form_start(searchForm, {'attr': {'class': 'form-inline my-2 my-lg-0', 'action': path('searchResult')}}) }}
+        {{ form_end(searchForm) }}
     </div>
 </nav>

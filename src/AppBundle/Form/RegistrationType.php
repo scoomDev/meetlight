@@ -30,6 +30,8 @@ class RegistrationType extends AbstractType
             ->add('route', HiddenType::class)
             ->add('locality', HiddenType::class)
             ->add('country', HiddenType::class)
+            ->add('lat', HiddenType::class)
+            ->add('lng', HiddenType::class)
         ;
     }
 

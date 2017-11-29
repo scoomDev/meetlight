@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    public function findUserByKeyword($keyword)
+    {
+        $qb = $this->createQueryBuilder('u')
+                ->where('REGEXP(u.username, :regexp) = true')
+                ->setParameter('regexp', $keyword)
+                ->leftJoin('u.skill', 'skl')
+                ->addSelect('skl');
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }
