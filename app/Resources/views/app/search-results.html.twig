@@ -7,7 +7,7 @@
             <ul>
                 {% if usersList != null %}
                     {% for user in usersList %}
-                        <li>{{ user.username }}</li>
+                        <li>{{ user[0].username }} - {{ user.distance }} kms</li>
                     {% endfor %}
                     {% else %}
                         <p>Aucun résultats trouvés avec "{{ keyword }}"</p>

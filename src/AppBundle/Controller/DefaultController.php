@@ -36,13 +36,20 @@ class DefaultController extends Controller
 
     /**
      * @Route("/search-result", name="searchResult")
+     * @param Request $request
+     *
      * @return Response
      */
     public function searchResultAction(Request $request) : Response
     {
         $em = $this->getDoctrine()->getManager();
         $keyword = $request->request->get('search_form')['search'];
-        $usersList = $em->getRepository('AppBundle:User')->findUserByKeyword($keyword);
+        // $usersList = $em->getRepository('AppBundle:User')->findUserByKeyword($keyword);
+        $actualUser = $this->getUser();
+        $lat = $actualUser->getLat();
+        $lng = $actualUser->getLng();
+        $requestedDistance = 500;
+        $usersList = $em->getRepository('AppBundle:User')->findUserByDistance($keyword, $lat, $lng, $requestedDistance);
 
         return $this->render('app/search-results.html.twig', ['usersList' => $usersList, 'keyword' => $keyword]);
     }
