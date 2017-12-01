@@ -29,7 +29,7 @@ class UserRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function findUserByDistance($keyword, $lat, $lng, $requestedDistance)
+    public function findUserByDistance($keyword, $skill, $lat, $lng, $requestedDistance)
     {
         $em = $this->getEntityManager();
         $config = $em->getConfiguration();
@@ -43,6 +43,8 @@ class UserRepository extends EntityRepository
                 ->setParameter('regexp', $keyword)
                 ->leftJoin('u.skill', 'skl')
                 ->addSelect('skl')
+                ->andWhere('skl = :skill')
+                ->setParameter('skill', $skill)
                 ->addSelect('(6371 * acos(cos(radians(' . $lat . ')) * cos(radians(u.lat)) * cos(radians(u.lng) - radians(' . $lng . ')) + sin(radians(' . $lat . ')) * sin(radians(u.lat)))) AS distance')
                 ->having('distance <= :radius')
                 ->setParameter('radius', $requestedDistance)
@@ -50,19 +52,4 @@ class UserRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
-
-    /*public function getAll($user,$param){
-        $qb = $this
-                ->createQueryBuilder('u')
-                ->select('u.username , u.gender')
-                ->addSelect('(6371 * acos(cos(radians(' . $user->getLat() . ')) * cos(radians(u.lat)) * cos(radians(u.lng) - radians(' . $user->getLon() . ')) + sin(radians(' . $user->getLat() . ')) * sin(radians(u.lat)))) AS distance')
-                ->having('distance <= :radius')
-                ->setParameter('radius', $param['distance'])
-                ->leftJoin('u.categories', 'c')
-                ->addSelect('c')
-                ->orderBy('distance', 'DESC')
-                ->setFirstResult(100 - $param['page']*100)
-                ->setMaxResults(100);
-        return $qb->getQuery()->getResult();
-    }*/
 }

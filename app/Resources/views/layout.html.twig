@@ -16,7 +16,8 @@
 </head>
 
 <body>
-{{ render(controller('AppBundle:Default:navbar')) }}
+{% include 'app/inc/navbar.html.twig' %}
+{{ render(controller('AppBundle:Default:searchBar')) }}
 
 {% block body %}{% endblock %}
 

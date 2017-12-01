@@ -26,12 +26,12 @@ class DefaultController extends Controller
      *
      * @return Response
      */
-    public function navbarAction(Request $request) : Response
+    public function searchBarAction(Request $request) : Response
     {
-        $searchForm = $this->createForm('AppBundle\Form\SearchFormType');
-        $searchForm->handleRequest($request);
+        $searchBar_form = $this->createForm('AppBundle\Form\SearchFormType');
+        $searchBar_form->handleRequest($request);
 
-        return $this->render('app/inc/navbar.html.twig', ['searchForm' => $searchForm->createView()]);
+        return $this->render('app/inc/searchBar.html.twig', ['searchBar_form' => $searchBar_form->createView()]);
     }
 
     /**
@@ -44,13 +44,15 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $keyword = $request->request->get('search_form')['search'];
-        // $usersList = $em->getRepository('AppBundle:User')->findUserByKeyword($keyword);
+        $skillId = $request->request->get('search_form')['skill'];
+        $requestedDistance = $request->request->get('search_form')['distance'];
+
         $actualUser = $this->getUser();
         $lat = $actualUser->getLat();
         $lng = $actualUser->getLng();
-        $requestedDistance = 500;
-        $usersList = $em->getRepository('AppBundle:User')->findUserByDistance($keyword, $lat, $lng, $requestedDistance);
+        $usersList = $em->getRepository('AppBundle:User')->findUserByDistance($keyword, $skillId, $lat, $lng, $requestedDistance);
 
-        return $this->render('app/search-results.html.twig', ['usersList' => $usersList, 'keyword' => $keyword]);
+        $skill = $em->getRepository('AppBundle:Skill')->findOneBy(['id' => $skillId]);
+        return $this->render('app/search-results.html.twig', ['usersList' => $usersList, 'keyword' => $keyword, 'skill' => $skill]);
     }
 }

@@ -7,10 +7,10 @@
             <ul>
                 {% if usersList != null %}
                     {% for user in usersList %}
-                        <li>{{ user[0].username }} - {{ user.distance }} kms</li>
+                        <li>{{ user[0].username }} - {{ user.distance | round(1, 'floor') }} kms</li>
                     {% endfor %}
                     {% else %}
-                        <p>Aucun résultats trouvés avec "{{ keyword }}"</p>
+                        <p>Aucun résultats trouvés pour "{{ keyword }}", {{ skill.skill }}</p>
                 {% endif %}
             </ul>
         </div>

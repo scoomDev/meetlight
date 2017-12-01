@@ -1,3 +1,14 @@
-navbar:
+searchBar:
     searchForm:
         placeholder: 'Recherches une lumière'
+    skill:
+        label : 'Talent'
+    distance:
+        label : 'Dans un rayon de'
+        choices:
+            20: '20 kms'
+            30: '30 kms'
+            50: '50 kms'
+            100: '100 kms'
+            200: '200 kms'
+    btn: 'rechercher'
