@@ -6,6 +6,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 
@@ -15,6 +16,7 @@ class SearchFormType extends AbstractType
     {
         $builder->add('search', SearchType::class, [
             'label' => false,
+            'required' => false,
             'translation_domain' => 'AppTranslate',
             'attr' => [
                 "placeholder" => "searchBar.searchForm.placeholder",
@@ -26,6 +28,23 @@ class SearchFormType extends AbstractType
                 'translation_domain' => 'AppTranslate',
                 'label' => false,
         ])
+        ->add('place', ChoiceType::class, [
+                'choices' => [
+                        'searchBar.place.country' => 'country',
+                        'searchBar.place.town' => 'town',
+                        'searchBar.place.around' => 'around',
+                ],
+                'label' => false,
+                'translation_domain' => 'AppTranslate'
+        ])
+        ->add('town', TextType::class, [
+                'label' => false,
+                'translation_domain' => 'AppTranslate',
+                'required' => false,
+                'attr' => [
+                        'placeholder' => 'searchBar.town.placeholder'
+                ]
+        ])
         ->add('distance', ChoiceType::class, [
                 'choices' => [
                         'searchBar.distance.choices.20' => 20,
@@ -35,7 +54,9 @@ class SearchFormType extends AbstractType
                         'searchBar.distance.choices.200' => 200,
                 ],
             'label' => 'searchBar.distance.label',
-            'translation_domain' => 'AppTranslate'
+            'translation_domain' => 'AppTranslate',
+            'placeholder' => 'searchBar.distance.placeholder',
+            'required' => false
         ])
         ->add('submit', SubmitType::class, [
                 'label' => 'searchBar.btn',

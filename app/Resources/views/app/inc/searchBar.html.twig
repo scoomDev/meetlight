@@ -8,7 +8,15 @@
                 <div class="col-md-2">{{ form_widget(searchBar_form.submit) }}</div>
             </div>
             <div class="form-row align-items-center">
-                <div class="col-auto pull-right">
+                <div class="col-auto">
+                    {{ form_label(searchBar_form.place) }}
+                    {{ form_widget(searchBar_form.place) }}
+                </div>
+                <div id="town" class="col-auto">
+                    {{ form_label(searchBar_form.town) }}
+                    {{ form_widget(searchBar_form.town) }}
+                </div>
+                <div id="distance" class="col-auto">
                     {{ form_label(searchBar_form.distance) }}
                     {{ form_widget(searchBar_form.distance) }}
                 </div>
@@ -17,3 +25,41 @@
         </div>
     </div>
 </div>
+
+{% block javascript %}
+    <script>
+        const distanceBloc = document.getElementById('distance'),
+            distanceSelect = document.getElementById('search_form_distance'),
+            townBloc = document.getElementById('town'),
+            placesChoices = document.getElementById('search_form_place');
+
+        distanceBloc.style.display = 'none';
+        townBloc.style.display = 'none';
+
+        distanceSelect.addEventListener('change', () => {
+            if (distanceSelect.value === "") {
+                distanceSelect.value = 20;
+            }
+            console.log(distanceSelect.value);
+        });
+
+        let selectValue = "country";
+        placesChoices.addEventListener('change', () => {
+            selectValue = placesChoices.value;
+
+            switch (selectValue) {
+                case "town":
+                    townBloc.style.display = 'block';
+                    distanceBloc.style.display = 'none';
+                    break;
+                case 'around':
+                    distanceBloc.style.display = 'block';
+                    townBloc.style.display = 'none';
+                    break;
+                default :
+                    distanceBloc.style.display = 'none';
+                    townBloc.style.display = 'none';
+            }
+        });
+    </script>
+{% endblock %}

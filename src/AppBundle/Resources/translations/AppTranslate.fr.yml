@@ -1,10 +1,17 @@
 searchBar:
     searchForm:
-        placeholder: 'Recherches une lumière'
+        placeholder: 'Rechercher une lumière'
     skill:
         label : 'Talent'
+    place:
+        country: 'Toute la France'
+        town: 'Ville'
+        around: 'Autour de moi'
+    town:
+        placeholder: 'Tapez le nom d''une ville'
     distance:
         label : 'Dans un rayon de'
+        placeholder: 'Choisissez une distance'
         choices:
             20: '20 kms'
             30: '30 kms'
@@ -12,3 +19,14 @@ searchBar:
             100: '100 kms'
             200: '200 kms'
     btn: 'rechercher'
+
+upload:
+    save: 'Envoyer'
+
+gallery:
+    edit:
+        title: 'Editer ma galerie photos'
+        buttons:
+            add: 'ajouter des photos'
+            start: 'télécharger'
+            cancel: 'tout annuler'

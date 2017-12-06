@@ -82,7 +82,7 @@ form:
     lastname: 'Nom'
     username: 'Nom d''utilisateur'
     email: 'Adresse e-mail'
-    skill: 'Ma compétence'
+    skill: 'Mon talent'
     address: 'Adresse'
     actualAddress: 'Adresse actuelle'
     current_password: 'Confirmer avec votre mot de passe'

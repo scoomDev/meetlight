@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    {{ render(controller('AppBundle:Default:searchBar')) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">{{ render(controller('FOSUserBundle:Profile:show')) }}</div>
+            <div class="col-lg-9">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

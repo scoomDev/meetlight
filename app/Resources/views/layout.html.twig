@@ -13,11 +13,12 @@
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Croppie CSS -->
     {% block croppieCSS %}{% endblock %}
+    <!-- Dropzone CSS -->
+    {% block dropzoneCSS %}{% endblock %}
 </head>
 
 <body>
 {% include 'app/inc/navbar.html.twig' %}
-{{ render(controller('AppBundle:Default:searchBar')) }}
 
 {% block body %}{% endblock %}
 
@@ -31,9 +32,7 @@
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <!-- FontAwesome -->
     <script src="https://use.fontawesome.com/70c9a54198.js"></script>
-
     <!-- Personal js -->
-    <script src="{{ asset('js/app.js') }}"></script>
 {% endblock %}
 </body>
 </html>

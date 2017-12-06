@@ -1,0 +1,139 @@
+{% extends 'layout.html.twig' %}
+
+{% trans_default_domain 'AppTranslate' %}
+
+{% block dropzoneCSS %}
+    <link href="{{ asset('css/dropzone/dropzone.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>{{ 'gallery.edit.title' | trans }}</h1>
+    <div class="card">
+        <div class="card-body">
+
+            <div id="actions" class="row mb-3">
+
+                <div class="col-lg-7">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <button class="btn btn-success fileinput-button dz-clickable">
+                        <i class="fa fa-plus" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.add' | trans }}</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary start">
+                        <i class="fa fa-upload" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.start' | trans }}</span>
+                    </button>
+                    <button type="reset" class="btn btn-warning cancel text-white">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.cancel' | trans }}</span>
+                    </button>
+                </div>
+
+                <div class="col-lg-5">
+                    <!-- The global file processing state -->
+                    <span class="fileupload-process">
+                      <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="opacity: 0;">
+                        <div class="progress-bar progress-bar-success" style="width: 100%;" data-dz-uploadprogress=""></div>
+                      </div>
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="files" id="previews">
+
+                <div id="template" class="file-row row align-items-center mb-3">
+                    <!-- This is used as the file preview template -->
+                    <div class="col-3">
+                        <div>
+                            <span class="preview"><img data-dz-thumbnail /></span>
+                        </div>
+                        <div>
+                            <p class="name" data-dz-name></p>
+                            <strong class="error text-danger" data-dz-errormessage></strong>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div>
+                            <p class="size" data-dz-size></p>
+                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-12">
+                        <div>
+                            <button class="btn btn-primary start">
+                                <i class="glyphicon glyphicon-upload"></i>
+                                <span>Start</span>
+                            </button>
+                            <button data-dz-remove class="btn btn-warning cancel">
+                                <i class="glyphicon glyphicon-ban-circle"></i>
+                                <span>Cancel</span>
+                            </button>
+                            <button data-dz-remove class="btn btn-danger delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+    <script src="{{ asset('js/dropzone/dropzone.min.js') }}"></script>
+    <script>
+        let previewNode = document.querySelector("#template");
+        previewNode.id = "";
+        let previewTemplate = previewNode.parentNode.innerHTML;
+        previewNode.parentNode.removeChild(previewNode);
+
+        const myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+            url: "{{ path('upload') }}", // Set the url
+            thumbnailWidth: 80,
+            thumbnailHeight: 80,
+            parallelUploads: 20,
+            previewTemplate: previewTemplate,
+            autoQueue: false, // Make sure the files aren't queued until manually added
+            previewsContainer: "#previews", // Define the container to display the previews
+            clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+        });
+
+        myDropzone.on("addedfile", function(file) {
+            // Hookup the start button
+            file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+        });
+
+        // Update the total progress bar
+        myDropzone.on("totaluploadprogress", function(progress) {
+            document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+        });
+
+        myDropzone.on("sending", function(file) {
+            // Show the total progress bar when upload starts
+            document.querySelector("#total-progress").style.opacity = "1";
+            // And disable the start button
+            file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+        });
+
+        // Hide the total progress bar when nothing's uploading anymore
+        myDropzone.on("queuecomplete", function(progress) {
+            document.querySelector("#total-progress").style.opacity = "0";
+        });
+
+        // Setup the buttons for all transfers
+        // The "add files" button doesn't need to be setup because the config
+        // clickable has already been specified.
+        document.querySelector("#actions .start").onclick = function() {
+            myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+        };
+        document.querySelector("#actions .cancel").onclick = function() {
+            myDropzone.removeAllFiles(true);
+        };
+    </script>
+{% endblock %}

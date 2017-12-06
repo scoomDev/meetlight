@@ -18,17 +18,49 @@ class UserRepository extends EntityRepository
      *
      * @return array
      */
-    public function findUserByKeyword($keyword) : array
+    public function findUserByKeyword($keyword, $skill) : array
     {
         $qb = $this->createQueryBuilder('u')
                 ->where('REGEXP(u.username, :regexp) = true')
                 ->setParameter('regexp', $keyword)
                 ->leftJoin('u.skill', 'skl')
-                ->addSelect('skl');
+                ->addSelect('skl')
+                ->andWhere('skl = :skill')
+                ->setParameter('skill', $skill);
 
-        return $qb->getQuery()->getArrayResult();
+        return $qb->getQuery()->getResult();
     }
 
+    /**
+     * @param $town
+     * @param $keyword
+     *
+     * @return array
+     */
+    public function findUserByTown($town, $keyword, $skill) : array
+    {
+        $qb = $this->createQueryBuilder('u')
+                ->where('REGEXP(u.locality, :town) = true')
+                ->setParameter('town', $town)
+                ->andWhere('REGEXP(u.username, :regexp) = true')
+                ->setParameter('regexp', $keyword)
+                ->leftJoin('u.skill', 'skl')
+                ->addSelect('skl')
+                ->andWhere('skl = :skill')
+                ->setParameter('skill', $skill);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $keyword
+     * @param $skill
+     * @param $lat
+     * @param $lng
+     * @param $requestedDistance
+     *
+     * @return array
+     */
     public function findUserByDistance($keyword, $skill, $lat, $lng, $requestedDistance)
     {
         $em = $this->getEntityManager();
