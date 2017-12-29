@@ -1,0 +1,52 @@
+{% extends 'appWithSearch.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <img class="card-img-top" src="{{ asset('images/profile/' ~ user.ImageName) }}"
+                             alt="Card image cap">
+                    </div>
+                    <div class="col-9">
+                        <h3 class="card-title">{{ user.username }}</h3>
+                        <p class="lead">- {{ user.skill }}</p>
+                        <p>{{ user.email }}</p>
+                        <p class="text-muted">{{ user.locality }}</p>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                {% for note in user.notes %}
+                    <div class="card mb-1">
+                        <div class="card-body">
+                            <p>Pour la collab du {{ note.collab.startedAt|date('d/m/Y') }} au {{ note.collab.finishedAt|date('d/m/Y') }}</p>
+                            <span><a href="{{ path('showUser', {'id': user.id}) }}">{{ note.userFrom }}</a> a donné à {{ user.username }} la note de : </span>
+                            <span>{{ note.note }}/5</span>
+                            {% if note.comment is not null %}
+                                <p class="bg-info text-white p-2">Son commentaire : {{ note.comment }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- GALLERY -->
+                {% if user.images|length > 0 %}
+                    <hr>
+                    <h3 class="card-title">Galerie de {{ user.username }}</h3>
+                    <div class="row">
+                        {% for image in user.images %}
+                            <div class="col-md-4 col-6 mb-2">
+                                <div class="img-box">
+                                    <img class="img-fluid" src="{{ asset( 'images/gallery/' ~ image.imageName ) }}"
+                                         alt="{{ image.imageAlt }}">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div><!-- end card-body -->
+        </div><!-- end card -->
+    </div>
+{% endblock %}

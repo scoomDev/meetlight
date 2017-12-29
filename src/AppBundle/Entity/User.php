@@ -2,7 +2,11 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Entity\Skill;
+use AppBundle\Entity\Collab;
+use AppBundle\Entity\CollabRequest;
+use AppBundle\Entity\Comment;
+use AppBundle\Entity\Note;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 
@@ -80,7 +84,6 @@ class User extends BaseUser
      */
     private $skill;
 
-
     /**
      * @ORM\Column(type="string", length=255)
      *
@@ -89,11 +92,55 @@ class User extends BaseUser
     private $imageName;
 
     /**
+     * @var Image
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="user")
+     */
+    private $images;
+
+    /**
+     * @var Collab
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Collab", mappedBy="userFrom")
+     */
+    private $collabOwner;
+
+    /**
+     * @var Collab
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Collab", mappedBy="userTo")
+     */
+    private $collabGuest;
+
+    /**
+     * @var Comment
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comment", mappedBy="user")
+     */
+    private $comments;
+
+    /**
+     * @var Note
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Note", mappedBy="user")
+     */
+    private $notes;
+
+    /**
+     * @var CollabRequest
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CollabRequest", mappedBy="user")
+     */
+    private $collabRequest;
+
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
+        parent::__construct();
         $this->setImageName('default-avatar.jpg');
+        $this->images = new ArrayCollection();
+        $this->collabOwner = new ArrayCollection();
+        $this->collabGuest = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+        $this->collabRequest = new ArrayCollection();
     }
 
     /**
@@ -142,30 +189,6 @@ class User extends BaseUser
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set skill
-     *
-     * @param \AppBundle\Entity\Skill $skill
-     *
-     * @return User
-     */
-    public function setSkill(\AppBundle\Entity\Skill $skill = null)
-    {
-        $this->skill = $skill;
-
-        return $this;
-    }
-
-    /**
-     * Get skill
-     *
-     * @return \AppBundle\Entity\Skill
-     */
-    public function getSkill()
-    {
-        return $this->skill;
     }
 
     /**
@@ -265,27 +288,6 @@ class User extends BaseUser
     }
 
     /**
-     * @param string $imageName
-     *
-     * @return User
-     */
-    public function setImageName($imageName)
-    {
-        $this->imageName = $imageName;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getImageName()
-    {
-        return $this->imageName;
-    }
-
-
-    /**
      * Set lat
      *
      * @param float $lat
@@ -310,30 +312,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set long
-     *
-     * @param float $long
-     *
-     * @return User
-     */
-    public function setLong($long)
-    {
-        $this->long = $long;
-
-        return $this;
-    }
-
-    /**
-     * Get long
-     *
-     * @return float
-     */
-    public function getLong()
-    {
-        return $this->long;
-    }
-
-    /**
      * Set lng
      *
      * @param float $lng
@@ -355,5 +333,257 @@ class User extends BaseUser
     public function getLng()
     {
         return $this->lng;
+    }
+
+    /**
+     * Set imageName
+     *
+     * @param string $imageName
+     *
+     * @return User
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * Get imageName
+     *
+     * @return string
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * Set skill
+     *
+     * @param Skill $skill
+     *
+     * @return User
+     */
+    public function setSkill(Skill $skill = null)
+    {
+        $this->skill = $skill;
+
+        return $this;
+    }
+
+    /**
+     * Get skill
+     *
+     * @return Skill
+     */
+    public function getSkill()
+    {
+        return $this->skill;
+    }
+
+    /**
+     * Add image
+     *
+     * @param Image $image
+     *
+     * @return User
+     */
+    public function addImage(Image $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param Image $image
+     */
+    public function removeImage(Image $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * Add collabOwner
+     *
+     * @param Collab $collabOwner
+     *
+     * @return User
+     */
+    public function addCollabOwner(Collab $collabOwner)
+    {
+        $this->collabOwner[] = $collabOwner;
+
+        return $this;
+    }
+
+    /**
+     * Remove collabOwner
+     *
+     * @param Collab $collabOwner
+     */
+    public function removeCollabOwner(Collab $collabOwner)
+    {
+        $this->collabOwner->removeElement($collabOwner);
+    }
+
+    /**
+     * Get collabOwner
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCollabOwner()
+    {
+        return $this->collabOwner;
+    }
+
+    /**
+     * Add collabGuest
+     *
+     * @param Collab $collabGuest
+     *
+     * @return User
+     */
+    public function addCollabGuest(Collab $collabGuest)
+    {
+        $this->collabGuest[] = $collabGuest;
+
+        return $this;
+    }
+
+    /**
+     * Remove collabGuest
+     *
+     * @param Collab $collabGuest
+     */
+    public function removeCollabGuest(Collab $collabGuest)
+    {
+        $this->collabGuest->removeElement($collabGuest);
+    }
+
+    /**
+     * Get collabGuest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCollabGuest()
+    {
+        return $this->collabGuest;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param Comment $comment
+     */
+    public function removeComment(Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Add note
+     *
+     * @param Note $note
+     *
+     * @return User
+     */
+    public function addNote(Note $note)
+    {
+        $this->notes[] = $note;
+
+        return $this;
+    }
+
+    /**
+     * Remove note
+     *
+     * @param Note $note
+     */
+    public function removeNote(Note $note)
+    {
+        $this->notes->removeElement($note);
+    }
+
+    /**
+     * Get notes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Add collabRequest
+     *
+     * @param CollabRequest $collabRequest
+     *
+     * @return User
+     */
+    public function addCollabRequest(CollabRequest $collabRequest)
+    {
+        $this->collabRequest[] = $collabRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove collabRequest
+     *
+     * @param CollabRequest $collabRequest
+     */
+    public function removeCollabRequest(CollabRequest $collabRequest)
+    {
+        $this->collabRequest->removeElement($collabRequest);
+    }
+
+    /**
+     * Get collabRequest
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCollabRequest()
+    {
+        return $this->collabRequest;
     }
 }

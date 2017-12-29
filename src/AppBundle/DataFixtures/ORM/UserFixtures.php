@@ -44,15 +44,68 @@ class UserFixtures extends Fixture
         $user2->setRoles(["ROLE_ADMIN"]);
         $user2->setEnabled(1);
 
+        $user3 = new User();
+        $user3->setUsername('benJt');
+        $user3->setEmail('benjt@gmail.com');
+        $user3->setImageName('default-avatar.jpg');
+        $user3->setPassword(password_hash('1234', PASSWORD_BCRYPT));
+        $user3->setFirstName('Benjamin');
+        $user3->setLastName('Tourette');
+        $user3->setSkill($this->getReference('skill'));
+        $user3->setStreetNumber("14");
+        $user3->setRoute("rue de l'égalité");
+        $user3->setLocality("Talence");
+        $user3->setCountry("France");
+        $user3->setLat(48.862725);
+        $user3->setLng(2.287592000000018);
+        $user3->setRoles(["ROLE_USER"]);
+        $user3->setEnabled(1);
+
+        $user4 = new User();
+        $user4->setUsername('wonderlandHP');
+        $user4->setEmail('camille2908@hotmail.fr');
+        $user4->setImageName('default-avatar.jpg');
+        $user4->setPassword(password_hash('1234', PASSWORD_BCRYPT));
+        $user4->setFirstName('Camille');
+        $user4->setLastName('Mourlas');
+        $user4->setSkill($this->getReference('skill2'));
+        $user4->setStreetNumber("14");
+        $user4->setRoute("rue de l'égalité");
+        $user4->setLocality("Saint-Pierre-Des-Corps");
+        $user4->setCountry("France");
+        $user4->setLat(47.3864352);
+        $user4->setLng(0.7143925999999965);
+        $user4->setRoles(["ROLE_USER"]);
+        $user4->setEnabled(1);
+
+        $user5 = new User();
+        $user5->setUsername('davidAD');
+        $user5->setEmail('david.ad@gmail.com');
+        $user5->setImageName('default-avatar.jpg');
+        $user5->setPassword(password_hash('1234', PASSWORD_BCRYPT));
+        $user5->setFirstName('David');
+        $user5->setLastName('Decelle');
+        $user5->setSkill($this->getReference('skill'));
+        $user5->setStreetNumber("10");
+        $user5->setRoute("rue de beaumont");
+        $user5->setLocality("Beaumont");
+        $user5->setCountry("France");
+        $user5->setLat(46.756722);
+        $user5->setLng(0.42861340000001746);
+        $user5->setRoles(["ROLE_USER"]);
+        $user5->setEnabled(1);
+
+
         $manager->persist($user);
         $manager->persist($user2);
+        $manager->persist($user3);
+        $manager->persist($user4);
+        $manager->persist($user5);
         $manager->flush();
     }
 
     public function getDependencies()
     {
-        return [
-                SkillFixtures::class
-        ];
+        return [ SkillFixtures::class ];
     }
 }

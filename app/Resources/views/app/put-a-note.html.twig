@@ -1,0 +1,89 @@
+{% extends 'app.html.twig' %}
+
+{% block content %}
+    {{ dump(notes) }}
+    {% for note in notes %}
+        {% if note.status == false %}
+            <div id="card{{ note.user.id }}" class="card mb-3">
+                <div class="card-body">
+                    <h5>Noter {{ note.user.username }}</h5>
+                    <hr>
+                    <div id="noteId" data-noteid="{{ note.id }}">
+                        <div class="form-group row">
+                            <label for="note{{ note.user.id }}" class="col-md-6">Mettre une note</label>
+                            <select id="note{{ note.user.id }}" name="note" id="note" class="form-control col-md-4">
+                                <option>Choisissez une note</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment{{ note.user.id }}">Laisser un commentaire</label>
+                            <textarea name="comment" id="comment{{ note.user.id }}" class="form-control" cols="30"
+                                      rows="5"></textarea>
+                        </div>
+                        <input type="submit"
+                               value="Valider"
+                               class="btn btn-success submitBtn"
+                               data-user="{{ note.user.id }}"
+                               data-collab="{{ note.collab.id }}">
+                    </div>
+                </div>
+            </div>
+            {% else %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="card-text">{{ note.user.username }} déjà noté !</p>
+                    </div>
+                </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            const jsonUrl = '{{ path('setNote') }}';
+            $('.submitBtn').each((i, el) => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    const noteId = document.querySelector('#noteId');
+                    const userId = el.dataset.user;
+                    const note = document.querySelector('#note' + userId);
+                    const comment = document.querySelector('#comment' + userId);
+                    const collab = el.dataset.collab;
+
+                    const data = {
+                        noteId: noteId.dataset.noteid,
+                        userId: userId,
+                        note: note.value,
+                        comment: comment.value,
+                        collab: collab
+                    };
+
+                    console.log(data);
+
+                    $.ajax({
+                        type: "POST",
+                        url: jsonUrl,
+                        data: data,
+                        dataType: 'json',
+                        success: (response) => {
+                            console.log('ok');
+                            document.getElementById('card' + userId).remove();
+                        },
+                        error: () => {
+                            console.log('error')
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}

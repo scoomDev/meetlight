@@ -33,3 +33,15 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    app_bundle.email.mailer:
+          class: AppBundle\Email\Mailer
+          arguments:
+              - "@mailer"
+
+    app_bundle.doctrine_listener.collab_creation:
+        class: AppBundle\DoctrineListener\CollabCreationListener
+        arguments:
+            - "@app_bundle.email.mailer"
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }

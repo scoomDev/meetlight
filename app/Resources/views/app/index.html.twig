@@ -1,13 +1,42 @@
 {% extends 'appWithSearch.html.twig' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <h1 class="card-title">Contenu</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque deserunt dolor dolorem eligendi eum excepturi, facilis fuga fugiat harum inventore, ipsum nesciunt nisi non quibusdam ratione repellat repudiandae tempore voluptatum.</p>
-        <hr>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque deserunt dolor dolorem eligendi eum excepturi, facilis fuga fugiat harum inventore, ipsum nesciunt nisi non quibusdam ratione repellat repudiandae tempore voluptatum.</p>
-        <hr>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Contenu</h1>
+            {% for collab in collabsList %}
+                {% if collab.isFinished %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Du {{ collab.startedAt|date('d/m/Y') }} au {{ collab.finishedAt|date('d/m/Y') }}
+                        </div>
+                        <div class="card-body">
+                            <a href="{{ path('showUser', {'id': collab.userFrom.id}) }}" title="voir son profil">
+                                {{ collab.userFrom }}
+                            </a> à invité
+                            {% for user in collab.userTo %}
+                                <a href="{{ path('showUser', {'id': user.id}) }}">{{ user }}</a>,
+                            {% endfor %}
+                            à collaborer !
+                        </div>
+                        <div class="card-footer text-muted">
+                        {% if collab.notes|length > 0 %}
+                            note {{ collab.averageRating | round(1, 'floor') }}/5
+                            {% else %}
+                            pas encore de note pour cette collaboration
+                        {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque deserunt dolor dolorem eligendi eum
+                excepturi, facilis fuga fugiat harum inventore, ipsum nesciunt nisi non quibusdam ratione repellat
+                repudiandae tempore voluptatum.</p>
+            <hr>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque deserunt dolor dolorem eligendi eum
+                excepturi, facilis fuga fugiat harum inventore, ipsum nesciunt nisi non quibusdam ratione repellat
+                repudiandae tempore voluptatum.</p>
+            <hr>
+        </div>
     </div>
-</div>
 {% endblock %}

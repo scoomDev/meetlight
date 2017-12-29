@@ -5,6 +5,11 @@
 body {
   padding-top: 5rem;
 }
+
+button:hover {
+  cursor: pointer;
+}
+
 .starter-template {
   padding: 3rem 1.5rem;
   text-align: center;
@@ -29,11 +34,107 @@ body {
 //--------------------------------------------------
 // Edit profile
 .img-box {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+
+
+// Edit profile
+.gallery {
+  .img-box:hover {
+    cursor: pointer;
+    & .card-img-overlay {
+      top: 0;
+    }
+  }
+
+  .img-fluid {
+    max-height: 12rem;
+  }
+
+  .card-img-overlay {
+    background-color: rgba(0,0,0,0.5);
+    top: 100%;
+    transition: .3s ease-in-out;
+  }
+}
+
+//--------------------------------------------------
+// PROFIL SEARCH
+//--------------------------------------------------
+// Autocompletion
+.twitter-typeahead {
+  width: 100%;
+}
+
+#search_search, #search-navbar-input, #search_filter {
+  width: 100%;
+}
+.typeahead.tt-hint {
+  width: 100%;
+}
+
+.typeahead.indexForm {
+  height: 3rem;
+}
+
+.btn-tah {
+  height: 2.8rem;
+}
+
+.tt-input { /* UPDATE: newer versions use tt-input instead of tt-query */
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999;
+}
+
+.tt-menu { /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+  width: 100%;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: .2rem;
+  box-shadow: $custom-shadow;
+}
+
+.places-title, .birds-title, .obs-title {
+  margin: 0 20px 5px 20px;
+  padding: 3px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.places-title {
+  color: cadetblue;
+}
+
+.birds-title {
+  color: orange;
+}
+
+.obs-title {
+  color: orange;
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-selectable:hover { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+  color: white;
+  background-color: cadetblue;
+}
+
+.tt-suggestion p {
+  margin: 0;
 }
 
 //--------------------------------------------------

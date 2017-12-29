@@ -12,7 +12,7 @@
                                 <div class="card">
                                     <img class="card-img-top" src="{{ asset('images/profile/' ~ user[0].ImageName) }}" alt="Card image cap">
                                     <div class="card-body">
-                                        <h4 class="card-title">{{ user[0].username }}</h4>
+                                        <h5 class="card-title">{{ user[0].username }}</h5>
                                         <p class="card-text">{{ user[0].locality }} - {{ user.distance }} kms</p>
                                         <p class="card-text"><small class="text-muted">{{ user[0].skill }}</small></p>
                                     </div>
@@ -21,9 +21,10 @@
                             <div class="card">
                                 <img class="card-img-top" src="{{ asset('images/profile/' ~ user.ImageName) }}" alt="Card image cap">
                                 <div class="card-body">
-                                    <h4 class="card-title">{{ user.username }}</h4>
+                                    <h5 class="card-title">{{ user.username }}</h5>
                                     <p class="card-text">{{ user.skill }}</p>
                                     <p class="card-text"><small class="text-muted">{{ user.locality }}</small></p>
+                                    <a href="{{ path('showUser', {'id': user.id}) }}" class="btn btn-info">voir profil</a>
                                 </div>
                             </div>
                         {% endif %}

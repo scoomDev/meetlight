@@ -1,0 +1,134 @@
+{% extends 'app.html.twig' %}
+
+{% block bootstrapDatepicker %}
+    <link rel="stylesheet" href="{{ asset('js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Créer une collaboration</h1>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-groupe">
+                            <input type="search" id="userInput" class="typeahead form-control"
+                                   placeholder="Recherche une lumière">
+                        </div>
+                    </div>
+                </div>
+                <div id="user-to" class="list-group mt-3 mb-3"></div>
+                {{ form_start(collabForm) }}
+                <div class="input-daterange input-group input-group-sm mb-3" id="datepicker">
+                    {{ form_widget(collabForm.startedAt) }}
+                    <p>{{ form_errors(collabForm.startedAt) }}</p>
+                    <span id="datepickerAddon" class="input-group-addon">au</span>
+                    {{ form_widget(collabForm.finishedAt) }}
+                    <p>{{ form_errors(collabForm.finishedAt) }}</p>
+                </div>
+                <fieldset id="userCollabForm" name="userCollabForm"></fieldset>
+                {{ form_end(collabForm) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/typeahead/typeahead.bundle.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $('.input-daterange').datepicker({
+                format: "yyyy-mm-dd"
+            });
+
+            const userInput = document.querySelector('#userInput');
+
+            getAutocomplete(usersList);
+            $('.typeahead').bind('typeahead:select', (ev, suggest) => {
+                console.log(suggest);
+                addUser(suggest, userInput);
+            }).bind('typeahead:close', () => {
+                userInput.value = "";
+            })
+        });
+
+        // gère l'autocomplétion via bloodhound & typeahead
+        // appelé en globale
+        const getAutocomplete = (usersList) => {
+            const engine = new Bloodhound({
+                initialize: false,
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('username'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: {
+                    url: usersList,
+                    cache: false
+                }
+            });
+
+            const promise = engine.initialize();
+            promise
+                .done(() => {
+                    console.log(engine.index.datums);
+                })
+                .fail(() => {
+                    console.log('err, something went wrong :(');
+                });
+
+            $('.typeahead').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1,
+                },
+                {
+                    name: 'users',
+                    source: engine,
+                    display: 'username',
+                    templates: {
+                        suggestion: (data) => {
+                            return '<div>' + data.username + ' - <span class="text-muted font-weight-light"> ' + data.skill.skill + '</span></div>'
+                        }
+                    }
+                });
+        };
+
+        // ajoute un talent (userFrom) à la collab
+        // appelé en global
+        const addUser = (suggest, userInput) => {
+            const userList = document.querySelector('#user-to');
+            const userCollabForm = document.querySelector('#userCollabForm');
+
+            if (userInput.value.length > 0) {
+                // ajoute un user à la liste
+                if (!document.querySelector('#' + userInput.value)) {
+                    userList.innerHTML +=
+                        '<a href="#" id="' + userInput.value + '" class="list-group-item list-group-item-action">'
+                        + userInput.value +
+                        '<span class="text-info"> - ' + suggest.skill.skill + '</span>' +
+                        '<span class="text-danger float-right">supprimer</span>' +
+                        '</a>';
+                }
+
+                // ajoute un input:hidden qu'on récupère en php
+                if (!document.querySelector('#input' + userInput.value)) {
+                    userCollabForm.innerHTML +=
+                        '<input id="input' + userInput.value + '" type="hidden" name="userTab[userTo][' + userInput.value + ']" value="' + suggest.id + '">';
+                }
+
+                // Pour chaque élément de la liste des utilisateur on appel la fn "removeUser"
+                document.querySelectorAll('.list-group-item').forEach((el) => removeUser(el));
+            }
+        };
+
+        // Supprime l'élément de la liste ainsi que son input:hidden associé
+        // appelé dans addUser()
+        const removeUser = (el) => {
+            const userId = el.id;
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                el.remove();
+                document.querySelector('#input' + userId).remove();
+            });
+        };
+    </script>
+{% endblock %}

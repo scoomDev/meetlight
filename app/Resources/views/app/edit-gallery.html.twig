@@ -8,10 +8,9 @@
 
 {% block body %}
 <div class="container">
-    <h1>{{ 'gallery.edit.title' | trans }}</h1>
-    <div class="card">
-        <div class="card-body">
-
+    <div class="card mb-3">
+        <div class="card-header">
+            <h1 >{{ 'gallery.edit.title' | trans }}</h1>
             <div id="actions" class="row mb-3">
 
                 <div class="col-lg-7">
@@ -23,7 +22,7 @@
                         <i class="fa fa-upload" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.start' | trans }}</span>
                     </button>
                     <button type="reset" class="btn btn-warning cancel text-white">
-                        <i class="fa fa-times-circle" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.cancel' | trans }}</span>
+                        <i class="fa fa-times-circle" aria-hidden="true"></i> <span>{{ 'gallery.edit.buttons.cancelAll' | trans }}</span>
                     </button>
                 </div>
 
@@ -37,47 +36,69 @@
                 </div>
 
             </div>
-
+        </div>
+        <div class="card-body">
             <div class="files" id="previews">
-
                 <div id="template" class="file-row row align-items-center mb-3">
                     <!-- This is used as the file preview template -->
-                    <div class="col-3">
+                    <div class="col-2">
                         <div>
                             <span class="preview"><img data-dz-thumbnail /></span>
                         </div>
                         <div>
-                            <p class="name" data-dz-name></p>
                             <strong class="error text-danger" data-dz-errormessage></strong>
                         </div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-8">
                         <div>
-                            <p class="size" data-dz-size></p>
+                            <span class="name" data-dz-name></span>
+                            <span> / </span>
+                            <span class="size" data-dz-size></span>
                             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                <div class="progress-bar progress-bar-success" style="width:0;" data-dz-uploadprogress></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-4 col-12">
+                    <div class="col-md-2 col-12">
                         <div>
-                            <button class="btn btn-primary start">
-                                <i class="glyphicon glyphicon-upload"></i>
-                                <span>Start</span>
-                            </button>
-                            <button data-dz-remove class="btn btn-warning cancel">
-                                <i class="glyphicon glyphicon-ban-circle"></i>
-                                <span>Cancel</span>
-                            </button>
-                            <button data-dz-remove class="btn btn-danger delete">
-                                <i class="glyphicon glyphicon-trash"></i>
-                                <span>Delete</span>
+                            {#<button class="btn btn-primary start">
+                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                <span>{{ "gallery.edit.buttons.start" | trans }}</span>
+                            </button>#}
+                            <button data-dz-remove class="btn btn-warning cancel text-white">
+                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                <span>{{ "gallery.edit.buttons.cancel" | trans }}</span>
                             </button>
                         </div>
                     </div>
                 </div>
-
+            </div>
+        </div>
+    </div>
+    <div class="card gallery">
+        <div class="card-body">
+            <h1 class="card-title">Ma galerie - {{ app.user.images | length }}/10</h1>
+            <div class="row">
+                {% for image in app.user.images %}
+                    <div class="col-md-4 col-6 mb-2">
+                        <div class="img-box">
+                            <div class="card-img-overlay">
+                                <p class="lead text-white">{{ image.imageAlt }}</p>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#imageModal{{ image.id }}">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    {{ "gallery.edit.buttons.editAlt" | trans }}
+                                </button>
+                                <a class="btn btn-danger" href="{{ path('removeImage', {'id': image.id }) }}">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                     {{ "gallery.edit.buttons.delete" | trans }}
+                                </a>
+                            </div>
+                            <img class="img-fluid" src="{{ asset( 'images/gallery/' ~ image.imageName ) }}" alt="{{ image.imageAlt }}">
+                        </div>
+                        {% include 'app/inc/modal-edit-gallery.html.twig' %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -89,6 +110,8 @@
     <script src="{{ asset('js/dropzone/dropzone.min.js') }}"></script>
     <script>
         let previewNode = document.querySelector("#template");
+        document.querySelector('#actions .start').setAttribute('disabled', 'disabled');
+        document.querySelector('#actions .cancel').setAttribute('disabled', 'disabled');
         previewNode.id = "";
         let previewTemplate = previewNode.parentNode.innerHTML;
         previewNode.parentNode.removeChild(previewNode);
@@ -98,15 +121,19 @@
             thumbnailWidth: 80,
             thumbnailHeight: 80,
             parallelUploads: 20,
+            maxFiles: 10 - {{ app.user.images|length }},
             previewTemplate: previewTemplate,
             autoQueue: false, // Make sure the files aren't queued until manually added
             previewsContainer: "#previews", // Define the container to display the previews
-            clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+            clickable: ".fileinput-button", // Define the element that should be used as click trigger to select files.
+            dictMaxFilesExceeded: "{{ "gallery.edit.dz.max-files" | trans }}"
         });
 
-        myDropzone.on("addedfile", function(file) {
+        myDropzone.on("addedfile", function() {
+            document.querySelector('#actions .start').removeAttribute('disabled');
+            document.querySelector('#actions .cancel').removeAttribute('disabled');
             // Hookup the start button
-            file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+            //file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
         });
 
         // Update the total progress bar
@@ -114,16 +141,18 @@
             document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
         });
 
-        myDropzone.on("sending", function(file) {
+        myDropzone.on("sending", function() {
             // Show the total progress bar when upload starts
             document.querySelector("#total-progress").style.opacity = "1";
             // And disable the start button
-            file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+            //file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
         });
 
         // Hide the total progress bar when nothing's uploading anymore
-        myDropzone.on("queuecomplete", function(progress) {
+        myDropzone.on("queuecomplete", function() {
             document.querySelector("#total-progress").style.opacity = "0";
+            myDropzone.removeAllFiles(true);
+            window.location.reload(true);
         });
 
         // Setup the buttons for all transfers

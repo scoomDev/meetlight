@@ -60,6 +60,7 @@ class UserRepository extends EntityRepository
      * @param $requestedDistance
      *
      * @return array
+     * @throws \Doctrine\ORM\ORMException
      */
     public function findUserByDistance($keyword, $skill, $lat, $lng, $requestedDistance)
     {
@@ -83,5 +84,28 @@ class UserRepository extends EntityRepository
                 ->orderBy('distance', 'ASC');
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findUsersJson() : array
+    {
+        $qb = $this->_em->createQuery('SELECT PARTIAL u.{id, username}, PARTIAL s.{id, skill} FROM AppBundle:User u JOIN u.skill s');
+
+        return $qb->getArrayResult();
+    }
+
+    public function showCompleteUser($id, $user)
+    {
+        $qb = $this->createQueryBuilder('u')
+                ->where('u.id = :id')
+                ->leftJoin('u.images', 'imgs')
+                ->leftJoin('u.notes', 'notes', 'WITH', 'notes.user = :user AND notes.status = true')
+                ->addSelect('imgs')
+                ->addSelect('notes')
+                ->setParameters([
+                        'id' => $id,
+                        'user' => $user
+                ]);
+
+        return $qb->getQuery()->getSingleResult();
     }
 }

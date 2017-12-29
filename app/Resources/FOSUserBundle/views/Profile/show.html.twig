@@ -8,15 +8,23 @@
                     <img class="profile-img" src="{{ asset('images/profile/' ~ user.ImageName) }}" alt="Photo de profil de {{ user.username }}">
                 </div>
             {% endif %}
-            <p>
-                {{ user.username }} - {{ user.skill }}<br>
+            <h5 class="text-center">{{ user.username }}</h5>
+            <p class="lead">- {{ user.skill }}</p>
+            <hr>
+            <p class="text-muted text-center">
                 {{ user.locality }}<br>
                 {{ user.email }}
             </p>
             <hr>
+            <p>Moyenne de {{ note | round(1, 'floor') }}/5</p>
+            <hr>
+            <a href="{{ path('showRequest') }}"><span id="invitation-container" class="badge badge-info"></span> invitations</a>
+            <hr>
             <nav class="nav flex-column">
                 <a class="nav-link" href="{{ path('fos_user_profile_edit') }}">Modifier mon profil</a>
                 <a class="nav-link" href="{{ path('gallery') }}">Modifier ma galerie</a>
+                <a class="nav-link" href="{{ path('create_collab') }}">Créer une collaboration</a>
+                <a class="nav-link" href="{{ path('showCollab') }}">Voir les collabrations</a>
             </nav>
         </div>
     </div>

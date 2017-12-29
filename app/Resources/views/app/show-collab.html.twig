@@ -1,0 +1,74 @@
+{% extends 'app.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        {% if collabs is empty %}
+            <div class="alert alert-info">
+                <p>Vous n'avez aucune collaboration en attente.</p>
+            </div>
+        {% else %}
+            {% for collab in collabs %}
+                <div class="card mb-3">
+                    <div class="card-header text-white
+                        {{ collab.isCanceled ? "bg-danger" : "bg-dark" }}">
+                        <h4>
+                            Du {{ collab.startedAt|date('d/m/Y') }} au {{ collab.finishedAt|date('d/m/Y') }}
+                            {{ collab.isCanceled ? " - annulé" : "" }}
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Par : {{ collab.userFrom }}
+                            {% if collab.isFinished == false and collab.isCanceled == false %}
+                                - En attente
+                                {% elseif collab.isFinished == true and collab.isCanceled == false %}
+                                - Terminé
+                                {% else %}
+                            {% endif %}
+                        </h4>
+                        <hr>
+                        <h5>Avec</h5>
+                        <div class="list-group">
+                            {% for user in collab.userTo %}
+                                <a href="{{ path('showUser', {'id': user.id}) }}" class="list-group-item" title="voir son profil">
+                                    {{ user.username }} - {{ user.skill }}
+                                    {% for collabReq in user.collabRequest %}
+                                        {% if collab.id == collabReq.collab.id %}
+                                            {% if collabReq.isAccepted %}
+                                                <span class="float-right text-success">Accepté</span>
+                                            {% elseif collabReq.isRefused %}
+                                                <span class="float-right text-danger">Refusé</span>
+                                            {% else %}
+                                                <span class="float-right text-dark">En attente</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </a>
+                            {% endfor %}
+
+                            {% if collab.isFinished %}
+                                {% if collab.notes|length != 0 %}
+                                    <a href="{{ path('putANote', {'id': collab.id}) }}" class="btn btn-info">
+                                        Mettre une note aux Lumières
+                                    </a>
+                                {% endif %}
+                        {% endif %}
+
+                            {% if collab.userFrom == app.user %}
+                                {% if collab.isFinished == false and collab.isCanceled == false %}
+                                    <div class="list-group-item">
+                                        <a href="{{ path('validateCollab', {'id': collab.id}) }}" class="btn btn-success">
+                                            <i class="fas fa-check"></i> Collaboration réalisé
+                                        </a>
+                                        <a href="{{ path('cancelCollab', {'id': collab.id}) }}" class="btn btn-danger">
+                                            <i class="fas fa-times"></i> Annuler collaboration
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

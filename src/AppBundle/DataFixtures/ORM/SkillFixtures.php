@@ -28,7 +28,9 @@ class SkillFixtures extends Fixture
         $manager->persist($skill4);
         $manager->flush();
 
-        $this->addReference('skill', $skill);
-        $this->addReference('skill4', $skill4);
+        $this->setReference('skill', $skill);
+        $this->setReference('skill2', $skill2);
+        $this->setReference('skill3', $skill3);
+        $this->setReference('skill4', $skill4);
     }
 }

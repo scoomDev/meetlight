@@ -29,4 +29,14 @@ gallery:
         buttons:
             add: 'ajouter des photos'
             start: 'télécharger'
-            cancel: 'tout annuler'
+            cancelAll: 'tout annuler'
+            cancel: 'annuler'
+            delete: 'supprimer'
+            editAlt: 'éditer le titre'
+        dz:
+            max-files: 'Maximum atteint, veuillez supprimer cette image'
+
+create-collab:
+    save: 'Enregistrer'
+    startedAt: 'Commence'
+    finishedAt: 'Finis'

@@ -1,0 +1,36 @@
+{% extends 'appWithSearch.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        {% if invitations is empty %}
+            <div class="alert alert-info">
+                <p>Vous n'avez aucune invitations en attente.</p>
+            </div>
+        {% else %}
+            {% for invitation in invitations %}
+                <div class="card">
+                    <h3 class="card-header">{{ invitation.collab.userFrom }} vous invite à collaborer</h3>
+                    <div class="card-body">
+                        <p class="lead">
+                            Du {{ invitation.collab.startedAt|date('d/m/Y') }}
+                            au {{ invitation.collab.finishedAt|date('d/m/Y') }}
+                        </p>
+                        <h5>Avec :</h5>
+                        <div class="list-group">
+                            {% for userTo in invitation.collab.userTo %}
+                                {% if userTo.username != app.user %}
+                                    <a href="{{ path('showUser', {'id': userTo.id}) }}"
+                                       class="list-group-item">{{ userTo.username }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ path('acceptRequest', {'id': invitation.id}) }}" class="btn btn-info">Accepter</a>
+                        <a href="{{ path('refuseRequest', {'id': invitation.id}) }}" class="btn btn-warning">Refuser</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
