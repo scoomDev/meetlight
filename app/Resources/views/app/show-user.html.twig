@@ -20,10 +20,12 @@
                 <!-- NOTES -->
                 {% for note in user.notes %}
                     <div class="card mb-1">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title">Pour la collab du {{ note.collab.startedAt|date('d/m/Y') }} au {{ note.collab.finishedAt|date('d/m/Y') }}</h5>
+                        </div>
                         <div class="card-body">
-                            <p>Pour la collab du {{ note.collab.startedAt|date('d/m/Y') }} au {{ note.collab.finishedAt|date('d/m/Y') }}</p>
-                            <span><a href="{{ path('showUser', {'id': user.id}) }}">{{ note.userFrom }}</a> a donné à {{ user.username }} la note de : </span>
-                            <span>{{ note.note }}/5</span>
+                            <p class="card-text"><span><a href="{{ path('showUser', {'id': user.id}) }}">{{ note.userFrom }}</a> a donné à {{ user.username }} la note de : </span>
+                            <span>{{ note.note }}/5</span></p>
                             {% if note.comment is not null %}
                                 <p class="bg-info text-white p-2">Son commentaire : {{ note.comment }}</p>
                             {% endif %}

@@ -2,17 +2,17 @@
 
 namespace AppBundle\DoctrineListener;
 
-use AppBundle\Email\Mailer;
+use AppBundle\Email\InvitationMailer;
 use AppBundle\Entity\Collab;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 
 class CollabCreationListener
 {
-    private $mailer;
+    private $invitationMailer;
 
-    public function __construct(Mailer $mailer)
+    public function __construct(InvitationMailer $invitationMailer)
     {
-        $this->mailer = $mailer;
+        $this->invitationMailer = $invitationMailer;
     }
 
     public function postPersist(LifecycleEventArgs $args)
@@ -23,6 +23,6 @@ class CollabCreationListener
             return;
         }
 
-        $this->mailer->sendNewNotification($entity);
+        $this->invitationMailer->sendNewNotification($entity);
     }
 }

@@ -22,15 +22,20 @@ class SkillFixtures extends Fixture
         $skill4 = new Skill();
         $skill4->setSkill('Coiffeur/euse');
 
+        $skill5 = new Skill();
+        $skill5->setSkill('Modèle');
+
         $manager->persist($skill);
         $manager->persist($skill2);
         $manager->persist($skill3);
         $manager->persist($skill4);
+        $manager->persist($skill5);
         $manager->flush();
 
         $this->setReference('skill', $skill);
         $this->setReference('skill2', $skill2);
         $this->setReference('skill3', $skill3);
         $this->setReference('skill4', $skill4);
+        $this->setReference('skill5', $skill5);
     }
 }

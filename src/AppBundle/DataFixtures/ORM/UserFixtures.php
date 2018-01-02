@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
     {
         $user = new User();
         $user->setUsername('scoom');
-        $user->setEmail('scoom5@hotmail.com');
+        $user->setEmail('scoom@gmail.com');
         $user->setImageName('default-avatar.jpg');
         $user->setPassword(password_hash('1234', PASSWORD_BCRYPT));
         $user->setFirstName('Christopher');
@@ -46,7 +46,7 @@ class UserFixtures extends Fixture
 
         $user3 = new User();
         $user3->setUsername('benJt');
-        $user3->setEmail('benjt@gmail.com');
+        $user3->setEmail('benjt123@gmail.com');
         $user3->setImageName('default-avatar.jpg');
         $user3->setPassword(password_hash('1234', PASSWORD_BCRYPT));
         $user3->setFirstName('Benjamin');
@@ -63,7 +63,7 @@ class UserFixtures extends Fixture
 
         $user4 = new User();
         $user4->setUsername('wonderlandHP');
-        $user4->setEmail('camille2908@hotmail.fr');
+        $user4->setEmail('wonderlandhp@gmail.com');
         $user4->setImageName('default-avatar.jpg');
         $user4->setPassword(password_hash('1234', PASSWORD_BCRYPT));
         $user4->setFirstName('Camille');
@@ -80,7 +80,7 @@ class UserFixtures extends Fixture
 
         $user5 = new User();
         $user5->setUsername('davidAD');
-        $user5->setEmail('david.ad@gmail.com');
+        $user5->setEmail('davidad123@gmail.com');
         $user5->setImageName('default-avatar.jpg');
         $user5->setPassword(password_hash('1234', PASSWORD_BCRYPT));
         $user5->setFirstName('David');
@@ -95,12 +95,30 @@ class UserFixtures extends Fixture
         $user5->setRoles(["ROLE_USER"]);
         $user5->setEnabled(1);
 
+        $user6 = new User();
+        $user6->setUsername('Elsa Destange');
+        $user6->setEmail('elsad123@gmail.com');
+        $user6->setImageName('default-avatar.jpg');
+        $user6->setPassword(password_hash('1234', PASSWORD_BCRYPT));
+        $user6->setFirstName('Elsa');
+        $user6->setLastName('Destange');
+        $user6->setSkill($this->getReference('skill5'));
+        $user6->setStreetNumber("10");
+        $user6->setRoute("Rue du Clos Gaultier");
+        $user6->setLocality("Poitiers");
+        $user6->setCountry("France");
+        $user6->setLat(46.5650992);
+        $user6->setLng(0.34077300000001287);
+        $user6->setRoles(["ROLE_USER"]);
+        $user6->setEnabled(1);
+
 
         $manager->persist($user);
         $manager->persist($user2);
         $manager->persist($user3);
         $manager->persist($user4);
         $manager->persist($user5);
+        $manager->persist($user6);
         $manager->flush();
     }
 

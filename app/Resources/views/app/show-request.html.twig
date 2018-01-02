@@ -15,15 +15,17 @@
                             Du {{ invitation.collab.startedAt|date('d/m/Y') }}
                             au {{ invitation.collab.finishedAt|date('d/m/Y') }}
                         </p>
-                        <h5>Avec :</h5>
-                        <div class="list-group">
-                            {% for userTo in invitation.collab.userTo %}
-                                {% if userTo.username != app.user %}
-                                    <a href="{{ path('showUser', {'id': userTo.id}) }}"
-                                       class="list-group-item">{{ userTo.username }}</a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                        {% if invitation.collab.userTo|length > 1 %}
+                            <h5>Avec :</h5>
+                            <div class="list-group">
+                                {% for userTo in invitation.collab.userTo %}
+                                    {% if userTo.username != app.user %}
+                                        <a href="{{ path('showUser', {'id': userTo.id}) }}"
+                                           class="list-group-item">{{ userTo.username }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="card-footer">
                         <a href="{{ path('acceptRequest', {'id': invitation.id}) }}" class="btn btn-info">Accepter</a>

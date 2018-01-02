@@ -127,44 +127,6 @@ class CoreController extends Controller
     }
 
     /**
-     * @param $id
-     *
-     * @return RedirectResponse
-     * @Route("/validate-collab/{id}", name="validateCollab")
-     */
-    public function validateCollab($id): RedirectResponse
-    {
-        $em = $this->getDoctrine()->getManager();
-        $collab = $em->getRepository('AppBundle:Collab')->find($id);
-        $collab->setIsFinished(true);
-        $em->persist($collab);
-        $em->flush();
-
-        $this->addFlash('success', 'Cette collaboration est noté comme terminé');
-
-        return $this->redirectToRoute('showCollab');
-    }
-
-    /**
-     * @param $id
-     *
-     * @return RedirectResponse
-     * @Route("/cancel-collab/{id}", name="cancelCollab")
-     */
-    public function cancelCollab($id): RedirectResponse
-    {
-        $em = $this->getDoctrine()->getManager();
-        $collab = $em->getRepository('AppBundle:Collab')->find($id);
-        $collab->setIsCanceled(true);
-        $em->persist($collab);
-        $em->flush();
-
-        $this->addFlash('success', 'Cette collaboration est noté comme annulé');
-
-        return $this->redirectToRoute('showCollab');
-    }
-
-    /**
      * @param Request $request
      *
      * @return JsonResponse

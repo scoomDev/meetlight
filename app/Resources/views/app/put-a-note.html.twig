@@ -1,7 +1,6 @@
 {% extends 'app.html.twig' %}
 
 {% block content %}
-    {{ dump(notes) }}
     {% for note in notes %}
         {% if note.status == false %}
             <div id="card{{ note.user.id }}" class="card mb-3">

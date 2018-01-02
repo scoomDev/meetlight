@@ -19,10 +19,12 @@ class ProfileController extends Controller
         $notesList = $em->getRepository('AppBundle:Note')->getProfileNotes($user->getId());
 
         $note = 0;
-        for ($i = 0; $i < count($notesList); $i++) {
-            $note += $notesList[$i]->getNote();
+        if (count($notesList) != 0) {
+            for ($i = 0; $i < count($notesList); $i++) {
+                $note += $notesList[$i]->getNote();
+            }
+            $note = $note / count($notesList);
         }
-        $note = $note / count($notesList);
 
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');

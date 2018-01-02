@@ -4,7 +4,7 @@ namespace AppBundle\Email;
 
 use AppBundle\Entity\Collab;
 
-class Mailer
+class InvitationMailer
 {
     /**
      * @var \Swift_Mailer

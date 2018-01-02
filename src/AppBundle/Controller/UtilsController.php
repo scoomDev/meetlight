@@ -122,6 +122,44 @@ class UtilsController extends Controller
     }
 
     /**
+     * @param $id
+     *
+     * @return RedirectResponse
+     * @Route("/validate-collab/{id}", name="validateCollab")
+     */
+    public function validateCollab($id): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $collab = $em->getRepository('AppBundle:Collab')->find($id);
+        $collab->setIsFinished(true);
+        $em->persist($collab);
+        $em->flush();
+
+        $this->addFlash('success', 'Cette collaboration est noté comme terminé');
+
+        return $this->redirectToRoute('showCollab');
+    }
+
+    /**
+     * @param $id
+     *
+     * @return RedirectResponse
+     * @Route("/cancel-collab/{id}", name="cancelCollab")
+     */
+    public function cancelCollab($id): RedirectResponse
+    {
+        $em = $this->getDoctrine()->getManager();
+        $collab = $em->getRepository('AppBundle:Collab')->find($id);
+        $collab->setIsCanceled(true);
+        $em->persist($collab);
+        $em->flush();
+
+        $this->addFlash('success', 'Cette collaboration est noté comme annulé');
+
+        return $this->redirectToRoute('showCollab');
+    }
+
+    /**
      * @return Response
      * @Route("/edit-gallery", name="gallery")
      */
@@ -240,6 +278,9 @@ class UtilsController extends Controller
         $em->persist($collabRequest);
         $em->flush();
 
+        $mailer = $this->container->get('app_bundle.email.request_mailer');
+        $mailer->sendNewNotification($collabRequest, $collabRequest->getUser());
+
         $this->addFlash('success', 'L\'invitation à bien été accepté');
 
         $invitations = $em->getRepository('AppBundle:CollabRequest')->findInvitation($user->getId());
@@ -265,6 +306,9 @@ class UtilsController extends Controller
 
         $em->persist($collabRequest);
         $em->flush();
+
+        $mailer = $this->container->get('app_bundle.email.request_mailer');
+        $mailer->sendNewNotification($collabRequest, $collabRequest->getUser());
 
         $this->addFlash('success', 'L\'invitation à bien été refusé');
 
@@ -311,14 +355,12 @@ class UtilsController extends Controller
             }
             $note->setStatus(true);
 
-
             $em->persist($collab);
             $em->persist($note);
             $em->flush();
 
             return new JsonResponse('ok', 200);
         }
-
         return new JsonResponse('error', 500);
     }
 }
